@@ -2,16 +2,14 @@
   "name": "Native Web Servers Environment",
   "image": "ubuntu:22.04",
 
-  "forwardPorts": [8080, 8081, /*8082,*/ 8443, 8444 /*8445,*/],
+  "forwardPorts": [22, 8080, 8081, 8443, 8444],
 
   "portsAttributes": {
-    "8080": { "label": "Apache HTTP", "onAutoForward": "notify", "visibility": "public", "protocol": "http" },
-    "8081": { "label": "Nginx HTTP",  "onAutoForward": "notify", "visibility": "public", "protocol": "http" },
-    // "8082": { "label": "Tomcat HTTP", "onAutoForward": "notify", "visibility": "public", "protocol": "http" },
-    "8443": { "label": "Apache HTTPS","onAutoForward": "notify", "visibility": "public", "protocol": "https" },
-    "8444": { "label": "Nginx HTTPS", "onAutoForward": "notify", "visibility": "public", "protocol": "https" },
-    // "8445": { "label": "Tomcat HTTPS","onAutoForward": "notify", "visibility": "public", "protocol": "https" },
-    "22":   { "label": "SSH",          "onAutoForward": "notify", "visibility": "private" }
+    "22":   { "label": "SSH",          "onAutoForward": "openPreview", "visibility": "public" },
+    "8080": { "label": "Apache HTTP", "onAutoForward": "openPreview", "visibility": "public", "protocol": "http" },
+    "8081": { "label": "Nginx HTTP",  "onAutoForward": "openPreview", "visibility": "public", "protocol": "http" },
+    "8443": { "label": "Apache HTTPS","onAutoForward": "openPreview", "visibility": "public", "protocol": "https" },
+    "8444": { "label": "Nginx HTTPS", "onAutoForward": "openPreview", "visibility": "public", "protocol": "https" }
   },
 
   "otherPortsAttributes": {
@@ -19,7 +17,7 @@
   },
 
   "postCreateCommand": "apt-get update && apt-get install -y sudo curl wget iproute2 net-tools && chmod +x *.sh .devcontainer/*.sh && .devcontainer/setup.sh",
-  "postStartCommand": "echo 'Use ./manage-services.sh to manage your web servers!'",
+  "postStartCommand": ".devcontainer/ensure-services.sh",
 
   "customizations": {
     "vscode": {

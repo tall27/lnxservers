@@ -20,7 +20,7 @@ fi
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 
-# Configure SSH daemon for security
+# Configure SSH daemon for security and external access
 sudo tee /etc/ssh/sshd_config.d/webserver-access.conf > /dev/null <<EOF
 # Web Server SSH Configuration
 Port 22
@@ -30,9 +30,11 @@ PubkeyAuthentication yes
 AuthorizedKeysFile .ssh/authorized_keys
 X11Forwarding no
 AllowTcpForwarding yes
-GatewayPorts no
+GatewayPorts yes
 ClientAliveInterval 60
 ClientAliveCountMax 3
+# Allow external connections
+ListenAddress 0.0.0.0
 EOF
 
 # Restart SSH service

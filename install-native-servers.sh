@@ -29,6 +29,11 @@ echo "🔐 Configuring SSH server..."
 sudo systemctl enable ssh
 sudo systemctl start ssh
 
+# Ensure services are enabled for auto-start
+echo "⚡ Enabling services for automatic startup..."
+sudo systemctl enable apache2
+sudo systemctl enable nginx
+
 # Configure firewall for SSH and web services
 sudo ufw allow ssh
 sudo ufw allow 8080/tcp  # Apache HTTP
