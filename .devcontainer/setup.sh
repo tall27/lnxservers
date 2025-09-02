@@ -20,17 +20,8 @@ if [ "$AUTO_INSTALL" = "true" ]; then
     echo "🔧 Auto-installing web servers..."
     sudo ./install-native-servers.sh
     
-    echo "🔐 Configuring SSH..."
-    ./configure-ssh.sh
-    
-    echo "⚡ Enabling services for auto-start..."
-    sudo systemctl enable ssh apache2 nginx
-    
-    echo "🚀 Starting all services..."
-    sudo systemctl start ssh apache2 nginx
-    
-    echo "📊 Checking service status..."
-    ./manage-services.sh status
+    echo "🐳 Starting services in container mode..."
+    sudo ./start-services-container.sh
     
     echo ""
     echo "✅ Setup complete! Your servers are ready and will auto-start:"

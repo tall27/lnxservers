@@ -8,9 +8,22 @@ echo "🔍 Ensuring all services are running and healthy..."
 
 cd /workspaces/lnxservers
 
-# Function to check if a service is active
+# Function to check if a service is active (container-compatible)
 is_service_active() {
-    systemctl is-active --quiet "$1" 2>/dev/null
+    case "$1" in
+        ssh|sshd)
+            pgrep -f sshd > /dev/null 2>&1
+            ;;
+        apache2)
+            pgrep -f apache2 > /dev/null 2>&1
+            ;;
+        nginx)
+            pgrep -f nginx > /dev/null 2>&1
+            ;;
+        *)
+            return 1
+            ;;
+    esac
 }
 
 # Function to check if a port is responding
@@ -20,13 +33,23 @@ is_port_responding() {
     timeout 5 curl -s -f -k "${protocol}://localhost:${port}" >/dev/null 2>&1
 }
 
-# Function to start and enable a service
+# Function to start a service (container-compatible)
 ensure_service() {
     local service=$1
     if ! is_service_active "$service"; then
         echo "⚡ Starting $service..."
-        sudo systemctl enable "$service" 2>/dev/null || true
-        sudo systemctl start "$service"
+        case "$service" in
+            ssh|sshd)
+                mkdir -p /run/sshd
+                /usr/sbin/sshd -D -p 22 &
+                ;;
+            apache2)
+                apache2ctl start
+                ;;
+            nginx)
+                nginx
+                ;;
+        esac
         sleep 2
     fi
 }
@@ -65,7 +88,7 @@ for i in {1..3}; do
         break
     elif [ $i -eq 3 ]; then
         echo "⚠️  Apache health check failed after 3 attempts"
-        sudo systemctl restart apache2
+        pkill apache2 && sleep 1 && apache2ctl start
     else
         echo "⏳ Apache health check attempt $i failed, retrying..."
         sleep 2
@@ -79,7 +102,7 @@ for i in {1..3}; do
         break
     elif [ $i -eq 3 ]; then
         echo "⚠️  Nginx health check failed after 3 attempts"
-        sudo systemctl restart nginx
+        pkill nginx && sleep 1 && nginx
     else
         echo "⏳ Nginx health check attempt $i failed, retrying..."
         sleep 2
@@ -96,7 +119,9 @@ fi
 # Final status check
 echo ""
 echo "📊 Final Service Status:"
-sudo systemctl --no-pager status ssh apache2 nginx || true
+echo "SSH: $(is_service_active ssh && echo "✅ Running" || echo "❌ Not running")"
+echo "Apache2: $(is_service_active apache2 && echo "✅ Running" || echo "❌ Not running")"  
+echo "Nginx: $(is_service_active nginx && echo "✅ Running" || echo "❌ Not running")"
 
 echo ""
 echo "🌐 Your services are ready and accessible:"
