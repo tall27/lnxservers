@@ -18,10 +18,10 @@ chmod +x *.sh .devcontainer/*.sh
 # Check if we should auto-install
 if [ "$AUTO_INSTALL" = "true" ]; then
     echo "🔧 Auto-installing web servers..."
-    sudo ../install-native-servers.sh
+    sudo ./install-native-servers.sh
     
     echo "🔐 Configuring SSH..."
-    ../configure-ssh.sh
+    ./configure-ssh.sh
     
     echo "⚡ Enabling services for auto-start..."
     sudo systemctl enable ssh apache2 nginx
@@ -30,7 +30,7 @@ if [ "$AUTO_INSTALL" = "true" ]; then
     sudo systemctl start ssh apache2 nginx
     
     echo "📊 Checking service status..."
-    ../manage-services.sh status
+    ./manage-services.sh status
     
     echo ""
     echo "✅ Setup complete! Your servers are ready and will auto-start:"
