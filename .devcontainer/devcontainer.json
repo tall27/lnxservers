@@ -1,15 +1,8 @@
 {
   "name": "Native Web Servers Environment",
-  "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+  "image": "ubuntu:22.04",
   
-  // Features to install
-  "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "installZsh": true,
-      "configureZshAsDefaultShell": true,
-      "installOhMyZsh": true
-    }
-  },
+  // No additional features needed - we install everything via our scripts
 
   // Forward ports for web servers
   "forwardPorts": [8080, 8081, 8082, 8443, 8444, 8445, 22],
@@ -47,7 +40,7 @@
   },
 
   // Run commands after container creation
-  "postCreateCommand": "chmod +x *.sh .devcontainer/*.sh && .devcontainer/setup.sh",
+  "postCreateCommand": "apt-get update && apt-get install -y sudo curl wget && chmod +x *.sh .devcontainer/*.sh && .devcontainer/setup.sh",
   
   // Commands to run after the container starts
   "postStartCommand": "echo 'Use ./manage-services.sh to manage your web servers!'",
@@ -70,7 +63,6 @@
 
   // Run as root to allow service installation
   "remoteUser": "root",
-  "containerUser": "root",
 
   // Mount the workspace
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind",
