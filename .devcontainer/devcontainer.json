@@ -1,23 +1,87 @@
 {
-  "name": "web-servers-codespace",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
-  "forwardPorts": [8080, 8081, 8082],
-  "containerEnv": {
-    "EMAIL_TO": "",
-    "EMAIL_FROM": "",
-    "SENDGRID_API_KEY": ""
-  },
-  "postCreateCommand": "bash .devcontainer/scripts/provision.sh",
+  "name": "Native Web Servers Environment",
+  "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+  
+  // Features to install
   "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {}
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true
+    }
   },
+
+  // Forward ports for web servers
+  "forwardPorts": [8080, 8081, 8082, 8443, 8444, 8445, 22],
+  
+  // Port attributes
+  "portsAttributes": {
+    "8080": {
+      "label": "Apache HTTP",
+      "onAutoForward": "notify"
+    },
+    "8081": {
+      "label": "Nginx HTTP", 
+      "onAutoForward": "notify"
+    },
+    "8082": {
+      "label": "Tomcat HTTP",
+      "onAutoForward": "notify"
+    },
+    "8443": {
+      "label": "Apache HTTPS",
+      "onAutoForward": "notify"
+    },
+    "8444": {
+      "label": "Nginx HTTPS",
+      "onAutoForward": "notify"
+    },
+    "8445": {
+      "label": "Tomcat HTTPS", 
+      "onAutoForward": "notify"
+    },
+    "22": {
+      "label": "SSH",
+      "onAutoForward": "notify"
+    }
+  },
+
+  // Run commands after container creation
+  "postCreateCommand": "chmod +x *.sh .devcontainer/*.sh && .devcontainer/setup.sh",
+  
+  // Commands to run after the container starts
+  "postStartCommand": "echo 'Use ./manage-services.sh to manage your web servers!'",
+
+  // VS Code extensions to install
   "customizations": {
     "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-vscode.powershell",
+        "github.copilot"
+      ],
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "files.eol": "\n"
       }
     }
+  },
+
+  // Run as root to allow service installation
+  "remoteUser": "root",
+  "containerUser": "root",
+
+  // Mount the workspace
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  // Lifecycle scripts
+  "onCreateCommand": "echo 'Setting up native web servers environment...'",
+  
+  // Environment variables
+  "remoteEnv": {
+    "WORKSPACE_NAME": "lnxservers",
+    "AUTO_INSTALL": "false"
   }
 }

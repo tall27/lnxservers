@@ -1,0 +1,31 @@
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# SSL Certificates (will be generated)
+*.pem
+*.key
+*.crt
+*.csr
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Service specific
+/var/log/
+/etc/ssl/webservers/
+
+# SSH keys (if generated locally)
+*.pub
+id_*
+
+# Backup files
+*.bak
+*.backup
+*~
