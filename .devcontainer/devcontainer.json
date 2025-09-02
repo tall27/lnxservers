@@ -9,7 +9,7 @@
     "EMAIL_FROM": "",
     "SENDGRID_API_KEY": ""
   },
-  "postCreateCommand": "bash scripts/provision.sh",
+  "postCreateCommand": "bash .devcontainer/scripts/provision.sh",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {}
   },
