@@ -8,7 +8,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        apache2 \
        nginx \
-       tomcat9 \
+       tomcat10 \
        ca-certificates \
        curl \
        jq \
