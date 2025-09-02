@@ -1,86 +1,37 @@
 {
   "name": "Native Web Servers Environment",
   "image": "ubuntu:22.04",
-  
-  // No additional features needed - we install everything via our scripts
 
-  // Forward ports for web servers
   "forwardPorts": [8080, 8081, 8082, 8443, 8444, 8445, 22],
-  
-  // Port attributes
+
   "portsAttributes": {
-    "8080": {
-      "label": "Apache HTTP",
-      "onAutoForward": "notify",
-      "visibility": "public"
-    },
-    "8081": {
-      "label": "Nginx HTTP", 
-      "onAutoForward": "notify",
-      "visibility": "public"
-    },
-    "8082": {
-      "label": "Tomcat HTTP",
-      "onAutoForward": "notify",
-      "visibility": "public"
-    },
-    "8443": {
-      "label": "Apache HTTPS",
-      "onAutoForward": "notify",
-      "visibility": "public"
-    },
-    "8444": {
-      "label": "Nginx HTTPS",
-      "onAutoForward": "notify",
-      "visibility": "public"
-    },
-    "8445": {
-      "label": "Tomcat HTTPS", 
-      "onAutoForward": "notify",
-      "visibility": "public"
-    },
-    "22": {
-      "label": "SSH",
-      "onAutoForward": "notify",
-      "visibility": "public"
-    }
+    "8080": { "label": "Apache HTTP", "onAutoForward": "notify", "visibility": "public", "protocol": "http" },
+    "8081": { "label": "Nginx HTTP",  "onAutoForward": "notify", "visibility": "public", "protocol": "http" },
+    "8082": { "label": "Tomcat HTTP", "onAutoForward": "notify", "visibility": "public", "protocol": "http" },
+    "8443": { "label": "Apache HTTPS","onAutoForward": "notify", "visibility": "public", "protocol": "https" },
+    "8444": { "label": "Nginx HTTPS", "onAutoForward": "notify", "visibility": "public", "protocol": "https" },
+    "8445": { "label": "Tomcat HTTPS","onAutoForward": "notify", "visibility": "public", "protocol": "https" },
+    "22":   { "label": "SSH",          "onAutoForward": "notify", "visibility": "private" }
   },
 
-  // Run commands after container creation
-  "postCreateCommand": "apt-get update && apt-get install -y sudo curl wget && chmod +x *.sh .devcontainer/*.sh && .devcontainer/setup.sh",
-  
-  // Commands to run after the container starts
+  "otherPortsAttributes": {
+    "visibility": "public"
+  },
+
+  "postCreateCommand": "apt-get update && apt-get install -y sudo curl wget iproute2 net-tools && chmod +x *.sh .devcontainer/*.sh && .devcontainer/setup.sh",
   "postStartCommand": "echo 'Use ./manage-services.sh to manage your web servers!'",
 
-  // VS Code extensions to install
   "customizations": {
     "vscode": {
-      "extensions": [
-        "ms-vscode.vscode-json",
-        "redhat.vscode-yaml",
-        "ms-vscode.powershell",
-        "github.copilot"
-      ],
-      "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash",
-        "files.eol": "\n"
-      }
+      "extensions": ["ms-vscode.vscode-json","redhat.vscode-yaml","ms-vscode.powershell","github.copilot"],
+      "settings": { "terminal.integrated.defaultProfile.linux": "bash", "files.eol": "\n" }
     }
   },
 
-  // Run as root to allow service installation
   "remoteUser": "root",
-
-  // Mount the workspace
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-
-  // Lifecycle scripts
   "onCreateCommand": "echo 'Setting up native web servers environment...'",
-  
-  // Environment variables
-  "remoteEnv": {
-    "WORKSPACE_NAME": "lnxservers",
-    "AUTO_INSTALL": "false"
-  }
+
+  "remoteEnv": { "WORKSPACE_NAME": "lnxservers", "AUTO_INSTALL": "true" }
 }
