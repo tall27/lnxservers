@@ -2,7 +2,8 @@
 set -euo pipefail
 
 # Service Management Script
-# This script provides easy management of Apache, Nginx, and Tomcat services
+# This script provides easy management of Apache and Nginx services
+# (Tomcat support commented out - not currently installed)
 
 show_usage() {
     echo "Usage: $0 {start|stop|restart|status|logs|cleanup}"
@@ -21,7 +22,7 @@ start_services() {
     echo "🚀 Starting web servers..."
     sudo systemctl start apache2
     sudo systemctl start nginx
-    sudo systemctl start tomcat10
+    # sudo systemctl start tomcat10  # Commented out - Tomcat not installed
     sudo systemctl start ssh
     echo "✅ All services started"
     show_status
@@ -31,7 +32,7 @@ stop_services() {
     echo "🛑 Stopping web servers..."
     sudo systemctl stop apache2
     sudo systemctl stop nginx
-    sudo systemctl stop tomcat10
+    # sudo systemctl stop tomcat10  # Commented out - Tomcat not installed
     echo "✅ All services stopped"
 }
 
@@ -39,7 +40,7 @@ restart_services() {
     echo "🔄 Restarting web servers..."
     sudo systemctl restart apache2
     sudo systemctl restart nginx
-    sudo systemctl restart tomcat10
+    # sudo systemctl restart tomcat10  # Commented out - Tomcat not installed
     sudo systemctl restart ssh
     echo "✅ All services restarted"
     show_status
@@ -52,8 +53,8 @@ show_status() {
     sudo systemctl is-active apache2 && echo "✅ Running" || echo "❌ Stopped"
     printf "Nginx:   "
     sudo systemctl is-active nginx && echo "✅ Running" || echo "❌ Stopped"
-    printf "Tomcat:  "
-    sudo systemctl is-active tomcat10 && echo "✅ Running" || echo "❌ Stopped"
+    # printf "Tomcat:  "  # Commented out - Tomcat not installed
+    # sudo systemctl is-active tomcat10 && echo "✅ Running" || echo "❌ Stopped"
     printf "SSH:     "
     sudo systemctl is-active ssh && echo "✅ Running" || echo "❌ Stopped"
     
@@ -63,8 +64,8 @@ show_status() {
     echo "Apache HTTPS: https://localhost:8443"
     echo "Nginx HTTP:   http://localhost:8081"
     echo "Nginx HTTPS:  https://localhost:8444"
-    echo "Tomcat HTTP:  http://localhost:8082"
-    echo "Tomcat HTTPS: https://localhost:8445"
+    # echo "Tomcat HTTP:  http://localhost:8082"   # Commented out - Tomcat not installed
+    # echo "Tomcat HTTPS: https://localhost:8445"  # Commented out - Tomcat not installed
     
     echo ""
     echo "🔗 SSH Access:"

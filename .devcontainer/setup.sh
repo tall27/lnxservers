@@ -30,7 +30,7 @@ if [ "$AUTO_INSTALL" = "true" ]; then
     echo "✅ Setup complete! Your servers are ready:"
     echo "   - Apache: http://localhost:8080 (HTTPS: 8443)"
     echo "   - Nginx:  http://localhost:8081 (HTTPS: 8444)" 
-    echo "   - Tomcat: http://localhost:8082 (HTTPS: 8445)"
+    # echo "   - Tomcat: http://localhost:8082 (HTTPS: 8445)"  # Commented out - not installing Tomcat
     echo ""
     echo "🔧 Use './manage-services.sh' to manage services"
     echo "📖 Check README.md for detailed usage instructions"

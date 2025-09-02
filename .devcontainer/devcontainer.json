@@ -2,15 +2,15 @@
   "name": "Native Web Servers Environment",
   "image": "ubuntu:22.04",
 
-  "forwardPorts": [8080, 8081, 8082, 8443, 8444, 8445, 22],
+  "forwardPorts": [8080, 8081, /*8082,*/ 8443, 8444 /*8445,*/],
 
   "portsAttributes": {
     "8080": { "label": "Apache HTTP", "onAutoForward": "notify", "visibility": "public", "protocol": "http" },
     "8081": { "label": "Nginx HTTP",  "onAutoForward": "notify", "visibility": "public", "protocol": "http" },
-    "8082": { "label": "Tomcat HTTP", "onAutoForward": "notify", "visibility": "public", "protocol": "http" },
+    // "8082": { "label": "Tomcat HTTP", "onAutoForward": "notify", "visibility": "public", "protocol": "http" },
     "8443": { "label": "Apache HTTPS","onAutoForward": "notify", "visibility": "public", "protocol": "https" },
     "8444": { "label": "Nginx HTTPS", "onAutoForward": "notify", "visibility": "public", "protocol": "https" },
-    "8445": { "label": "Tomcat HTTPS","onAutoForward": "notify", "visibility": "public", "protocol": "https" },
+    // "8445": { "label": "Tomcat HTTPS","onAutoForward": "notify", "visibility": "public", "protocol": "https" },
     "22":   { "label": "SSH",          "onAutoForward": "notify", "visibility": "private" }
   },
 

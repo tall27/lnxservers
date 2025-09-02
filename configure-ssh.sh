@@ -38,59 +38,66 @@ EOF
 # Restart SSH service
 sudo systemctl restart ssh
 
-# Create SSH config for easy access
+# Create simplified SSH config (port forwarding not needed in Codespaces)
 tee ~/.ssh/config > /dev/null <<EOF
-# SSH Configuration for Web Servers
+# Basic SSH Configuration for Codespace environment
+# Port forwarding disabled - direct access available via Codespace URLs
 
-Host apache-server
+Host localhost
     HostName localhost
     User $(whoami)
     Port 22
     IdentityFile ~/.ssh/id_rsa
-    LocalForward 8080 localhost:8080
-    LocalForward 8443 localhost:8443
 
-Host nginx-server
-    HostName localhost
-    User $(whoami)
-    Port 22
-    IdentityFile ~/.ssh/id_rsa
-    LocalForward 8081 localhost:8081
-    LocalForward 8444 localhost:8444
-
-Host tomcat-server
-    HostName localhost
-    User $(whoami)
-    Port 22
-    IdentityFile ~/.ssh/id_rsa
-    LocalForward 8082 localhost:8082
-    LocalForward 8445 localhost:8445
-
-Host all-servers
-    HostName localhost
-    User $(whoami)
-    Port 22
-    IdentityFile ~/.ssh/id_rsa
-    LocalForward 8080 localhost:8080
-    LocalForward 8443 localhost:8443
-    LocalForward 8081 localhost:8081
-    LocalForward 8444 localhost:8444
-    LocalForward 8082 localhost:8082
-    LocalForward 8445 localhost:8445
+# Legacy port forwarding configurations (DISABLED for Codespaces)
+# Host apache-server
+#     HostName localhost
+#     User $(whoami)
+#     Port 22
+#     IdentityFile ~/.ssh/id_rsa
+#     LocalForward 8080 localhost:8080
+#     LocalForward 8443 localhost:8443
+# 
+# Host nginx-server
+#     HostName localhost
+#     User $(whoami)
+#     Port 22
+#     IdentityFile ~/.ssh/id_rsa
+#     LocalForward 8081 localhost:8081
+#     LocalForward 8444 localhost:8444
+# 
+# Host tomcat-server (DISABLED - Tomcat not installed)
+#     HostName localhost
+#     User $(whoami)
+#     Port 22
+#     IdentityFile ~/.ssh/id_rsa
+#     LocalForward 8082 localhost:8082
+#     LocalForward 8445 localhost:8445
+# 
+# Host all-servers
+#     HostName localhost
+#     User $(whoami)
+#     Port 22
+#     IdentityFile ~/.ssh/id_rsa
+#     LocalForward 8080 localhost:8080
+#     LocalForward 8443 localhost:8443
+#     LocalForward 8081 localhost:8081
+#     LocalForward 8444 localhost:8444
+#     LocalForward 8082 localhost:8082
+#     LocalForward 8445 localhost:8445
 EOF
 
 chmod 600 ~/.ssh/config
 
 echo "✅ SSH configuration complete!"
 echo ""
-echo "🔗 SSH Connection Examples:"
-echo "Connect to Apache server:  ssh apache-server"
-echo "Connect to Nginx server:   ssh nginx-server"
-echo "Connect to Tomcat server:  ssh tomcat-server"
-echo "Connect to all servers:    ssh all-servers"
+echo "ℹ️  SSH is configured for internal use only."
+echo "ℹ️  In Codespaces, you have direct terminal access - no port forwarding needed!"
 echo ""
-echo "📋 Manual SSH connection:"
+echo "� Basic SSH connection (if needed):"
 echo "ssh $(whoami)@localhost"
 echo ""
 echo "🔑 SSH key location: ~/.ssh/id_rsa"
 echo "🔑 Public key: ~/.ssh/id_rsa.pub"
+echo ""
+echo "🌐 Access your web servers directly through Codespace URLs!"
