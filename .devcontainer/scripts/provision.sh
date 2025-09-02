@@ -27,15 +27,23 @@ if [ -f /etc/nginx/sites-available/default ]; then
   sudo sed -i 's#root /var/www/html;#root /var/www/nginx/html;#' /etc/nginx/sites-available/default || true
 fi
 
-# Configure Tomcat -> 8082
+
+# Configure Tomcat -> 8082 (support Tomcat 9 and 10)
 if [ -f /etc/tomcat9/server.xml ]; then
   sudo sed -i 's/\(Connector port=\)"8080"/\1"8082"/' /etc/tomcat9/server.xml || true
 fi
+if [ -f /etc/tomcat10/server.xml ]; then
+  sudo sed -i 's/\(Connector port=\)"8080"/\1"8082"/' /etc/tomcat10/server.xml || true
+fi
+
 
 # Start/restart services
 sudo service apache2 restart || sudo apache2ctl -k restart || true
 sudo service nginx restart || true
 sudo service tomcat9 restart || true
+if [ -f /usr/share/tomcat10/bin/startup.sh ]; then
+  sudo /usr/share/tomcat10/bin/startup.sh || true
+fi
 
 # Build URLs
 apache_url="https://${CODESPACE_NAME}-${apache_port}.${FWD_DOMAIN}/"
