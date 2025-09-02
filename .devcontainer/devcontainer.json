@@ -1,0 +1,23 @@
+{
+  "name": "web-servers-codespace",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "forwardPorts": [8080, 8081, 8082],
+  "containerEnv": {
+    "EMAIL_TO": "",
+    "EMAIL_FROM": "",
+    "SENDGRID_API_KEY": ""
+  },
+  "postCreateCommand": "bash scripts/provision.sh",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}
